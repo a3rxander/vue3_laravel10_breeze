@@ -1,6 +1,18 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import { onMounted } from 'vue';
+
+import { useRouter } from 'vue-router';
+ 
+
+
+onMounted(() => {
+  
+const router = useRouter()
+
+router.push({ name:'login'})
+})
 </script>
 
 <template>
