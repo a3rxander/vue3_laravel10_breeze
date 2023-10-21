@@ -1,0 +1,71 @@
+import { defineStore } from 'pinia'
+import authApi from '@/api/authApi'
+import axios from 'axios'
+
+
+const csrf = () => axios.get(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`)
+
+export const AuthStore = defineStore('AuthStore', {
+    state: () => ({ 
+        user: [], 
+        loading:false,
+        if_authenticated:false,
+        }),
+    getters: { 
+    },
+    actions: {
+        async loginUser(userForm) {
+        
+            this.loading = true
+    
+            const { email, password } = userForm;
+            let form_data = new FormData();
+    
+            form_data.append('email', email);
+            form_data.append('password', password); 
+    
+            try { 
+    
+                await csrf()
+                await authApi.post('login', form_data);
+    
+                 
+                const data = await authApi.get('user')
+                this.user = data.data;
+                this.if_authenticated=true; 
+    
+                return { ok: true };
+            } catch (error) {
+    
+                console.log(error)
+                return { ok: false, message: error.response.data.message };
+            } finally {
+                // loader
+                this.loading = false;
+            }
+        },
+
+        async userLogou()
+        {
+
+        },
+
+        async CheckAuth()
+        {
+            this.loading=true
+            try {
+                
+                 
+                const data = await authApi.get('api/user')
+                this.user = data.data;
+                this.if_authenticated=true; 
+    
+                return { ok: true }; 
+            } catch (error) {
+
+                console.log(error)
+                return { ok: false, message: error.response.data.message };
+            }
+        }
+    },
+  })
