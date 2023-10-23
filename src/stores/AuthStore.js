@@ -30,7 +30,7 @@ export const AuthStore = defineStore('AuthStore', {
                 await authApi.post('login', form_data);
     
                  
-                const data = await authApi.get('user')
+                const data = await authApi.get('/api/user')
                 this.user = data.data;
                 this.if_authenticated=true; 
     
@@ -45,8 +45,22 @@ export const AuthStore = defineStore('AuthStore', {
             }
         },
 
-        async userLogou()
+        async userLogout()
         {
+            try {
+                this.loading=true
+
+                await authApi.post('/logout')
+                this.if_authenticated=false
+                this.user=[]
+                return {ok:true}
+            } catch (error) {
+                console.log(error)
+                return {ok:false}
+            }finally{
+
+                this.loading=false
+            }
 
         },
 
@@ -62,9 +76,11 @@ export const AuthStore = defineStore('AuthStore', {
     
                 return { ok: true }; 
             } catch (error) {
+ 
+                return { ok: false  };
+            }finally {
 
-                console.log(error)
-                return { ok: false, message: error.response.data.message };
+                this.loading=false
             }
         }
     },

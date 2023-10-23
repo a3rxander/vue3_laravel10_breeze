@@ -55,7 +55,7 @@ const fn_login = async () => {
       title: 'Éxito',
       text: message, // Puedes personalizar el mensaje que se muestra
     })
-    router.push({name:'home'})
+    router.push({name:'index'})
 
   } else {
     Swal.fire({
@@ -67,8 +67,8 @@ const fn_login = async () => {
 
 onMounted( async() => {
   
-  await CheckAuth()
-  if(if_authenticated)
+  const {ok} = await CheckAuth()
+  if(ok)
   {
   
     router.push({ name:'home'})
