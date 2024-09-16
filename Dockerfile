@@ -1,20 +1,24 @@
-# Establecer la imagen base
+# Utiliza una imagen oficial de Node.js como imagen base
 FROM node:latest
 
-# Establecer el directorio de trabajo
+# Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copiar el archivo package.json
-COPY package.json .
+# Copia package.json y package-lock.json al directorio de trabajo
+COPY package*.json ./
 
-# Instalar las dependencias
+# Instala las dependencias del proyecto
 RUN npm install
 
-# Copiar el resto de los archivos
+
+# Copia el resto del código de la aplicación al directorio de trabajo
 COPY . .
 
-# Exponer el puerto 3000
-EXPOSE 3000
+# Construye el proyecto Vue (comenta esta línea si estás desarrollando localmente)
+# RUN npm run build
 
-# Iniciar la aplicación
-CMD ["npm", "run", "dev"]
+# Expone el puerto en el que se ejecutará la aplicación
+EXPOSE 8080
+
+# Define el comando para iniciar la aplicación
+ENTRYPOINT ["npm", "run", "dev"]
